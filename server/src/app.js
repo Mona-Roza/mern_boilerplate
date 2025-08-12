@@ -1,28 +1,34 @@
-
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
 
-import authRoutes from "./routes/auth/auth.routes.js";
-
-dotenv.config();
-
-// Middleware configuration
-const corsOptions = {
-    origin: "http://localhost:8081"
-}
+import router from "./routes/index.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
 
 const app = express();
-app.use(cors(corsOptions)) // ?
-app.use(express.json()); // allows us to parse incoming requests:req.body
-app.use(express.urlencoded({ extended: true })); // ? 
 
-app.use("/api/auth", authRoutes);
+// --- Security & parsing middleware ---
+app.use(helmet());
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
+// --- CORS ---
+// Adjust origin(s) to your FE(s). If you need cookies cross-origin,
+// keep credentials: true and set the FE to send withCredentials.
+const corsOptions = {
+    origin: ["http://localhost:8081"], // add prod origins here
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
 
-// TODO
-// Set port and start server
-const PORT = process.env.PORT || 8080;
-const uri = `mongodb://${db.dbConfig.USERNAME}:${db.dbConfig.PASSWORD}@${db.dbConfig.HOST}:${db.dbConfig.PORT}/${db.dbConfig.DB}?authSource=admin`;
+// --- Routes ---
+app.use("/api", router);
 
+// --- Global error handler (must be last) ---
+app.use(errorHandler);
 
+export default app;
