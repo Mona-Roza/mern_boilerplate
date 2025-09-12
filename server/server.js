@@ -12,6 +12,31 @@ if (!process.env.JWT_SECRET) {
 
 const PORT = process.env.PORT || 8080;
 
+import crypto from "crypto";
+import { Role } from "./src/models/role.model.js";
+
+const createInitialRoles = async () => {
+    const roles = [
+        {
+            name: "admin",
+            permissions: ["user:read", "user:write", "order:manage", "product:manage"]
+        },
+        {
+            name: "client",
+            permissions: ["order:manage"]
+        }
+    ];
+
+    for (const role of roles) {
+        const exists = await Role.findOne({ name: role.name });
+        if (!exists) {
+            const hash = crypto.createHash("sha256").update(role.name).digest("hex");
+            await Role.create({ ...role, hash });
+            console.log(`Created role: ${role.name}`);
+        }
+    }
+};
+
 async function start() {
     try {
         // 1) Connect DB
@@ -22,7 +47,10 @@ async function start() {
             logger.info(`API listening on http://localhost:${PORT}`);
         });
 
-        // 3) Graceful shutdown
+        // 3) Create initial roles if not exist
+        await createInitialRoles();
+
+        // 4) Graceful shutdown
         const shutdown = (signal) => async () => {
             try {
                 logger.info(`\n${signal} received. Closing server...`);

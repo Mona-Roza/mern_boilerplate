@@ -11,7 +11,6 @@ export const ERROR_CODES = {
 
     // User management
     EMAIL_IN_USE: "EMAIL_IN_USE",
-    USERNAME_IN_USE: "USERNAME_IN_USE",
     USER_NOT_FOUND: "USER_NOT_FOUND",
     USER_NOT_VERIFIED: "USER_NOT_VERIFIED",
 
@@ -27,5 +26,9 @@ export const ERROR_CODES = {
 
     // Server / General
     SERVER_ERROR: "SERVER_ERROR",                   // Generic 500
-    SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE"      // External service down
+    SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE",      // External service down
+
+    // Category-specific
+    PARENT_CATEGORY_NOT_FOUND: "PARENT_CATEGORY_NOT_FOUND",
+    CATEGORY_NOT_FOUND: "CATEGORY_NOT_FOUND"
 };

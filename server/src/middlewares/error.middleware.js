@@ -6,14 +6,10 @@ export const errorHandler = (err, req, res, next) => {
         const fields = Object.keys(err.keyValue || {});
         // Pick a specific code if you know the field
         const code =
-            fields.includes("email") ? ERROR_CODES.EMAIL_IN_USE :
-                fields.includes("username") ? ERROR_CODES.USERNAME_IN_USE :
-                    ERROR_CODES.DUPLICATE_ENTRY;
+            fields.includes("email") ? ERROR_CODES.EMAIL_IN_USE : ERROR_CODES.DUPLICATE_ENTRY;
 
         const message =
-            fields.includes("email") ? "Email already in use." :
-                fields.includes("username") ? "Username already in use." :
-                    "Duplicate entry.";
+            fields.includes("email") ? "Email already in use." : "Duplicate entry.";
 
         return res.status(409).json({
             success: false,

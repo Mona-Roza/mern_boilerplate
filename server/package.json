@@ -1,5 +1,5 @@
 {
-  "name": "mern_server",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
@@ -22,6 +22,7 @@
     "jsonwebtoken": "^9.0.2",
     "mailtrap": "^4.2.0",
     "mongoose": "^8.17.0",
+    "multer": "^2.0.2",
     "pino": "^9.8.0"
   },
   "devDependencies": {
